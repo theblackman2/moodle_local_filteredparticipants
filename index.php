@@ -59,10 +59,10 @@ if (empty($roleids)) {
   exit;
 }
 
-// Validate that role IDs exist in the course context.
+// Validate that role IDs exist and are assignable in the course context.
 global $DB;
-$validroles = get_roles_used_in_context($context, false);
-$validroleids = array_keys($validroles);
+$assignableroles = get_assignable_roles($context, ROLENAME_BOTH, false);
+$validroleids = array_keys($assignableroles);
 $roleids = array_intersect($roleids, $validroleids);
 
 if (empty($roleids)) {
