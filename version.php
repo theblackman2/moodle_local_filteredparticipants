@@ -4,4 +4,4 @@ $plugin->component = 'local_filteredparticipants';
 $plugin->version = 2025112510;
 $plugin->requires = 2020061500;
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = 'v1.1.0';
+$plugin->release = 'v1.1.1';
