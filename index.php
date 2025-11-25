@@ -66,6 +66,12 @@ if (!empty($roleids)) {
   $existingroles = $DB->get_records_select('role', "id $rolesql", $roleparams, '', 'id');
   $validroleids = array_keys($existingroles);
   $roleids = array_intersect($roleids, $validroleids);
+  
+  // DEBUG: Show what roles were validated
+  if (debugging('', DEBUG_DEVELOPER)) {
+    echo html_writer::div('DEBUG - Parsed role IDs: ' . implode(', ', array_keys($existingroles)), 'alert alert-info');
+    echo html_writer::div('DEBUG - Valid role IDs after validation: ' . implode(', ', $roleids), 'alert alert-info');
+  }
 }
 
 if (empty($roleids)) {
@@ -85,15 +91,19 @@ if ($cacheddata !== false) {
   $users = $cacheddata['users'];
   $totalcount = $cacheddata['totalcount'];
 } else {
+  // Get context path to include parent contexts (system, category).
+  $contextids = array_map(function($ctx) { return $ctx->id; }, $context->get_parent_contexts(true));
+  
   // Build SQL to get total count.
   list($insql, $params) = $DB->get_in_or_equal($roleids, SQL_PARAMS_NAMED, 'role');
-  $params['contextid'] = $context->id;
+  list($contextsql, $contextparams) = $DB->get_in_or_equal($contextids, SQL_PARAMS_NAMED, 'ctx');
+  $params = array_merge($params, $contextparams);
 
   $countsql = "
         SELECT COUNT(DISTINCT u.id)
         FROM {role_assignments} ra
         JOIN {user} u ON u.id = ra.userid
-        WHERE ra.contextid = :contextid
+        WHERE ra.contextid $contextsql
         AND ra.roleid $insql
         AND u.deleted = 0
     ";
@@ -115,7 +125,7 @@ if ($cacheddata !== false) {
         SELECT DISTINCT u.*
         FROM {role_assignments} ra
         JOIN {user} u ON u.id = ra.userid
-        WHERE ra.contextid = :contextid
+        WHERE ra.contextid $contextsql
         AND ra.roleid $insql
         AND u.deleted = 0
         ORDER BY u.lastname, u.firstname
