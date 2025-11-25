@@ -59,14 +59,17 @@ if (empty($roleids)) {
   exit;
 }
 
-// Validate that role IDs exist and are assignable in the course context.
+// Validate that role IDs exist in the system.
 global $DB;
-$assignableroles = get_assignable_roles($context, ROLENAME_BOTH, false);
-$validroleids = array_keys($assignableroles);
-$roleids = array_intersect($roleids, $validroleids);
+if (!empty($roleids)) {
+  list($rolesql, $roleparams) = $DB->get_in_or_equal($roleids, SQL_PARAMS_NAMED, 'roleid');
+  $existingroles = $DB->get_records_select('role', "id $rolesql", $roleparams, '', 'id');
+  $validroleids = array_keys($existingroles);
+  $roleids = array_intersect($roleids, $validroleids);
+}
 
 if (empty($roleids)) {
-  echo $OUTPUT->notification(get_string('no_users', 'local_filteredparticipants'), 'info');
+  echo $OUTPUT->notification(get_string('no_roles_selected', 'local_filteredparticipants'), 'error');
   echo $OUTPUT->footer();
   exit;
 }
