@@ -9,3 +9,7 @@ $string['invalid_course'] = 'Identifiant de cours invalide.';
 $string['fullname'] = 'Nom complet';
 $string['useremail'] = 'Courriel';
 $string['username'] = 'Nom d\'utilisateur';
+$string['additionallinks'] = 'Liens supplémentaires';
+$string['viewblog'] = 'Voir le blog';
+$string['fullprofile'] = 'Profil complet';
+$string['backtocourse'] = 'Retour aux participants filtrés';

@@ -150,7 +150,7 @@ $table->head = [
 $table->attributes['class'] = 'generaltable';
 
 foreach ($users as $user) {
-  $profileurl = new moodle_url('/user/view.php', ['id' => $user->id, 'course' => $course->id]);
+  $profileurl = new moodle_url('/local/filteredparticipants/user_profile.php', ['id' => $user->id, 'course' => $course->id]);
   $row = [];
   $row[] = html_writer::link($profileurl, fullname($user, true));
   $row[] = s($user->email);

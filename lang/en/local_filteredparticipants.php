@@ -9,4 +9,8 @@ $string['invalid_course'] = 'Invalid course ID.';
 $string['fullname'] = 'Full name';
 $string['useremail'] = 'Email';
 $string['username'] = 'Username';
+$string['additionallinks'] = 'Additional links';
+$string['viewblog'] = 'View blog';
+$string['fullprofile'] = 'Full profile';
+$string['backtocourse'] = 'Back to filtered participants';
 
